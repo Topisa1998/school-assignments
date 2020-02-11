@@ -1,0 +1,83 @@
+#Tehnyt Topias Rantanen
+#ohjelma, joka kysyy kuinka monta kuppia kahvia käyttäjä juo päivässä
+#ja esittää graafisesti jakauman.
+#viimeksi muokattu
+
+#kahvinjuojien lukumäärät saa, kun sorttaa listan, ja etsii ensimmäisen seuraavan luvun sijainnin
+
+
+def survey():
+    answer_list = []
+    rivi = 0
+    print("Enter one response per line. End by entering an empty row.")
+    while rivi != "":
+        rivi = input("")
+        if rivi == "":
+            return answer_list
+        else:
+            answer_list.append(rivi)
+
+
+def purge_teadrinkers(answer_list):
+    answer_list.sort()
+    onlydrinkers_list = []
+    for i in range(0, len(answer_list)):
+        if answer_list[i] != "0":
+            onlydrinkers_list.append(answer_list[i])
+    length = len(answer_list)-len(onlydrinkers_list)
+    if length != 0:
+        print("Removed {:1d} non-coffee-drinkers responses".format(length))
+        print("")
+    return onlydrinkers_list
+
+
+def draw_distribution(onlydrinkers_list):
+    if len(onlydrinkers_list) > 0:
+        print("Information related to coffee drinkers:")
+    onlydrinkers_list = [int(i) for i in onlydrinkers_list]
+    try:
+        for i in range(min(onlydrinkers_list), max(onlydrinkers_list)+1):
+            count = onlydrinkers_list.count(i)
+            print(i, count*"#")
+    except ValueError:
+        pass
+    print("")
+
+def print_stats(onlydrinkers_list):
+    if len(onlydrinkers_list)>0:
+        onlydrinkers_list = [int(i) for i in onlydrinkers_list]
+        maxresponse = int(max(onlydrinkers_list))
+        print("The greatest response: {:1d} cups of coffee per day".format(maxresponse))
+        commonest = most_common(onlydrinkers_list)
+        print("The most common response: {:1d} cups of coffee per day".format(commonest))
+        percentage=percentage_overdrinkers(onlydrinkers_list)
+        if percentage>0:
+            print("{:.1f}% of the respondents drink more than 4 cups of coffee per day".format(percentage))
+        if percentage == 0:
+            print("None of the respondents drink too much coffee")
+def most_common(onlydrinkers_list):
+    maxim = 0
+    onlydrinkers_list = [int(i) for i in onlydrinkers_list]
+    for i in range(min(onlydrinkers_list), max(onlydrinkers_list)+1):
+        count=onlydrinkers_list.count(i)
+        if count > maxim:
+            maxim = count
+            maximnumber = i
+    return maximnumber
+
+
+def percentage_overdrinkers(onlydrinkers_list):
+    onlydrinkers_list = [int(i) for i in onlydrinkers_list]
+    jakaja=0
+    for elementti in onlydrinkers_list:
+        if elementti>4:
+            jakaja+=1
+    percentage = (jakaja/len(onlydrinkers_list))*100
+    return percentage
+def main():
+    lista=survey()
+    onlydrinkers_list=purge_teadrinkers(lista)
+    draw_distribution(onlydrinkers_list)
+    print_stats(onlydrinkers_list)
+
+main()
