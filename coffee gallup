@@ -3,7 +3,7 @@
 #ja esittää graafisesti jakauman.
 #viimeksi muokattu
 
-#kahvinjuojien lukumäärät saa, kun sorttaa listan, ja etsii ensimmäisen seuraavan luvun sijainnin
+
 
 
 def survey():
@@ -43,23 +43,26 @@ def draw_distribution(onlydrinkers_list):
         pass
     print("")
 
+
 def print_stats(onlydrinkers_list):
-    if len(onlydrinkers_list)>0:
+    if len(onlydrinkers_list) > 0:
         onlydrinkers_list = [int(i) for i in onlydrinkers_list]
         maxresponse = int(max(onlydrinkers_list))
         print("The greatest response: {:1d} cups of coffee per day".format(maxresponse))
         commonest = most_common(onlydrinkers_list)
         print("The most common response: {:1d} cups of coffee per day".format(commonest))
-        percentage=percentage_overdrinkers(onlydrinkers_list)
-        if percentage>0:
+        percentage = percentage_overdrinkers(onlydrinkers_list)
+        if percentage > 0:
             print("{:.1f}% of the respondents drink more than 4 cups of coffee per day".format(percentage))
         if percentage == 0:
             print("None of the respondents drink too much coffee")
+
+
 def most_common(onlydrinkers_list):
     maxim = 0
     onlydrinkers_list = [int(i) for i in onlydrinkers_list]
     for i in range(min(onlydrinkers_list), max(onlydrinkers_list)+1):
-        count=onlydrinkers_list.count(i)
+        count = onlydrinkers_list.count(i)
         if count > maxim:
             maxim = count
             maximnumber = i
@@ -68,16 +71,19 @@ def most_common(onlydrinkers_list):
 
 def percentage_overdrinkers(onlydrinkers_list):
     onlydrinkers_list = [int(i) for i in onlydrinkers_list]
-    jakaja=0
+    jakaja = 0
     for elementti in onlydrinkers_list:
-        if elementti>4:
-            jakaja+=1
+        if elementti > 4:
+            jakaja += 1
     percentage = (jakaja/len(onlydrinkers_list))*100
     return percentage
+
+
 def main():
-    lista=survey()
-    onlydrinkers_list=purge_teadrinkers(lista)
+    lista = survey()
+    onlydrinkers_list = purge_teadrinkers(lista)
     draw_distribution(onlydrinkers_list)
     print_stats(onlydrinkers_list)
+
 
 main()
