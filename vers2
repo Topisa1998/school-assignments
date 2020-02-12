@@ -1,0 +1,115 @@
+# Written by Topias Rantanen
+# Program, that asks the user for amounts of coffee drank a day, then prints
+# a graphic distribution and a couple facts about the given data.
+# Last edit 12.2.2020
+
+
+def survey():
+    """
+    Asks user for amounts of cups of coffee per day and adds them to list.
+    :return: list with input values
+    """
+    answer_list = []
+    rivi = 0
+    print("Enter one response per line. End by entering an empty row.")
+    while rivi != "":
+        rivi = input("")
+        if rivi == "":
+            answer_list = [int(i) for i in answer_list]
+            return answer_list
+        else:
+            answer_list.append(rivi)
+
+
+def purge_teadrinkers(answer_list):
+    """
+    Removes zeroes from the answer list and tells how many were removed.
+    :param answer_list: contains survey data
+    :return: Survey data without zeroes.
+    """
+    answer_list.sort()
+    purged_list = []
+    for i in range(0, len(answer_list)):
+        if answer_list[i] != 0:
+            purged_list.append(answer_list[i])
+    length = len(answer_list)-len(purged_list)
+    if length != 0:
+        print("Removed {:1d} non-coffee-drinkers responses".format(length))
+        print("")
+    return purged_list
+
+
+def draw_distribution(coffee_list):
+    """
+    Draws a pillar diagram out of #'s for amount of cups drank.
+    :param coffee_list: list with all the people who drink coffee
+    :return:
+    """
+    if len(coffee_list) > 0:
+        print("Information related to coffee drinkers:")
+    try:
+        for i in range(min(coffee_list), max(coffee_list)+1):
+            count = coffee_list.count(i)
+            print(i, count*"#")
+    except ValueError:
+        pass
+    print("")
+
+
+def print_stats(coffee_list):
+    """
+    Prints most common, highest value and percentage of people who drink
+    too much coffee.
+    :param coffee_list:
+    :return:
+    """
+    if len(coffee_list) > 0:
+        maxresponse = int(max(coffee_list))
+        print("The greatest response: {:1d} cups of coffee per day".format(maxresponse))
+        commonest = most_common(coffee_list)
+        print("The most common response: {:1d} cups of coffee per day".format(commonest))
+        percentage = percentage_overdrinkers(coffee_list)
+        if percentage > 0:
+            print("{:.1f}% of the respondents drink more than 4 cups of coffee per day".format(percentage))
+        if percentage == 0:
+            print("None of the respondents drink too much coffee")
+
+
+def most_common(coffee_list):
+    """
+    Finds the most common element in list
+    :param coffee_list:
+    :return: Most common value in list
+    """
+    prevmax = 0
+    commonest = 0
+    for i in range(min(coffee_list), max(coffee_list)+1):
+        count = coffee_list.count(i)
+        if count > prevmax:
+            prevmax = count
+            commonest = i
+    return commonest
+
+
+def percentage_overdrinkers(coffee_list):
+    """
+    Calculates the percentage of people who drink more than 4 cups a day.
+    :param coffee_list:
+    :return: percentage of overdrinkers
+    """
+    numerator = 0
+    for element in coffee_list:
+        if element > 4:
+            numerator += 1
+    percentage = (numerator/len(coffee_list))*100
+    return percentage
+
+
+def main():
+    lista = survey()
+    purged_list = purge_teadrinkers(lista)
+    draw_distribution(purged_list)
+    print_stats(purged_list)
+
+
+main()
